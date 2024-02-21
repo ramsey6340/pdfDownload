@@ -13,15 +13,6 @@ class LoginView extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    globalController.firebaseAuth
-        .userChanges()
-        .listen((User? user) {
-      if (user == null) {
-      } else {
-        Get.toNamed(Routes.HOME);
-        globalController.setCurrentUser(user);
-      }
-    });
 
     return Scaffold(
       appBar: AppBar(),

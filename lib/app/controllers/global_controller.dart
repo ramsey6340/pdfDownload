@@ -45,8 +45,18 @@ class GlobalController extends GetxController {
     currentUSer(user);
   }
 
-  Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
-    Get.toNamed(Routes.LOGIN);
+  void logout()  {
+    Get.defaultDialog(
+      title: "Deconnexion",
+      middleText: "Voulez-vous vous deconnecter ?",
+      textConfirm: "Oui",
+      textCancel: "Non",
+      onConfirm: () async {
+        await FirebaseAuth.instance.signOut();
+        Get.toNamed(Routes.LOGIN);
+      },
+      onCancel: () => Get.back(),
+    );
+
   }
 }

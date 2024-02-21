@@ -55,7 +55,8 @@ class SelectPdfView extends StatelessWidget {
                     title: controller.fileName.value,
                     size: controller.fileSize.value,
                     extension: controller.fileExtension.value,
-                    status: DocStatus.traitement.name,
+                    status:(globalController.userRole.value == Role.admin.name)
+                        ? DocStatus.ok.name:DocStatus.traitement.name,
                     author: controller.authorNameController.value.text,
                     fileUrl: '',
                     publicationYear: int.parse(controller.publicationYearController.value.text),

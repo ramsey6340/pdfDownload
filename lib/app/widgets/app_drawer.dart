@@ -16,7 +16,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     globalController.firebaseAuth
-        .userChanges()
+        .authStateChanges()
         .listen((User? user) {
       if (user == null) {
         print('User is currently signed out!');
@@ -36,16 +36,19 @@ class AppDrawer extends StatelessWidget {
                 child: DrawerHeader(
                   margin: const EdgeInsets.all(0.0),
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: (globalController.currentUSer.value!=null)?Center(
+                  child: Center(
                     child: ListTile(
                       leading: CircleAvatar(
                         radius: 20,
                         child: Text('${globalController.currentUSer.value?.email?[0].toUpperCase()}',
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),),
                       title: Text('${globalController.currentUSer.value?.email}'
-                        , style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),),
+                        , style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,),
+                      ),
                     ),
-                  ):SizedBox(),
+                  ),
                 ),
               ),
               const SizedBox(height: 20,),
@@ -55,7 +58,8 @@ class AppDrawer extends StatelessWidget {
                 }, icon: const Icon(Icons.description),
                     label: const Text("Nouveau document",)),
 
-              TextButton.icon(onPressed: (){}, icon: const Icon(Icons.logout, color: Colors.red,),
+              TextButton.icon(
+                  onPressed: (){globalController.logout();}, icon: const Icon(Icons.logout, color: Colors.red,),
                   label: const Text("Se deconnecter", style: TextStyle(color: Colors.red),)),
             ]
         )

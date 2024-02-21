@@ -49,7 +49,8 @@ class LoginController extends GetxController {
     docRef.get().then(
           (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
-        List<String> emails = data['emails'];
+        dynamic emails = data['emails'] ?? [];
+        print(emails);
         if(emails.contains(emailAddress)) {
           globalController.setRole(Role.admin.name);
         } else {
