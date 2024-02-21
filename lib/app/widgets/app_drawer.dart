@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pdf_download/app/controllers/global_controller.dart';
-
+import 'package:badges/badges.dart' as badges;
+import '../modules/manageDoc/controllers/manage_doc_controller.dart';
 import '../routes/app_pages.dart';
 import '../style/constantes.dart';
 
@@ -12,6 +13,7 @@ class AppDrawer extends StatelessWidget {
   });
 
   final globalController = Get.put(GlobalController());
+  final manageDocController = Get.put(ManageDocController());
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,23 @@ class AppDrawer extends StatelessWidget {
                 TextButton.icon(onPressed: (){
                   Get.toNamed(Routes.MANAGE_DOC);
                 }, icon: const Icon(Icons.description),
-                    label: const Text("Nouveau document",)),
+                    label: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text("Nouveau document",),
+                        const SizedBox(width: 10,),
+                        (manageDocController.nbDocs.value > 0)
+                            ?Container(
+                            padding: const EdgeInsets.all(3.0),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Text("${manageDocController.nbDocs.value}",
+                              style: const TextStyle(color: Colors.white),))
+                            :const SizedBox(),
+                      ],
+                    )),
 
               TextButton.icon(
                   onPressed: (){globalController.logout();}, icon: const Icon(Icons.logout, color: Colors.red,),

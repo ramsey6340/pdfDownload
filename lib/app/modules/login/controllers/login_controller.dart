@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pdf_download/app/controllers/global_controller.dart';
@@ -12,14 +11,13 @@ class LoginController extends GetxController {
   final globalController = Get.put(GlobalController());
 
   final firebaseAuth = FirebaseAuth.instance;
-  final showPassword = false.obs;
+  final showPassword = true.obs;
   final processingLogin = false.obs;
   final loginPageType = LoginPageType.signIn.obs;
   final errorText = ''.obs;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
 
   @override
   void onInit() {
@@ -44,18 +42,21 @@ class LoginController extends GetxController {
     showPassword(!showPassword.value);
   }
 
-  void setRole(String emailAddress) {
-    final docRef = FirebaseFirestore.instance.collection(CollectionNames.admins.name).doc("emails");
+  Future<void> setRole(String emailAddress) async {
+    final docRef = await FirebaseFirestore.instance
+        .collection(CollectionNames.admins.name)
+        .doc("emails");
     docRef.get().then(
-          (DocumentSnapshot doc) {
+      (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
         dynamic emails = data['emails'] ?? [];
-        if(emails.contains(emailAddress)) {
+        if (emails.contains(emailAddress)) {
           globalController.setRole(Role.admin.name);
         } else {
           globalController.setRole(Role.user.name);
-
         }
+
+        print(globalController.userRole.value);
       },
       onError: (e) => print("Error getting document: $e"),
     );
@@ -63,19 +64,18 @@ class LoginController extends GetxController {
 
   Future<void> signIn(String emailAddress, String password) async {
     processingLogin(true);
+
     try {
       final credential = await firebaseAuth.signInWithEmailAndPassword(
-          email: emailAddress,
-          password: password
-      );
+          email: emailAddress, password: password);
       if (credential.user != null) {
         //FirebaseAuth.instanceFor(app: Firebase.app(), persistence: Persistence.LOCAL);
         processingLogin(false);
         globalController.setCurrentUser(credential.user);
-        setRole(emailAddress);
+        await setRole(emailAddress);
+        print(globalController.userRole.value);
         Get.offAllNamed(Routes.HOME);
-      }
-      else{
+      } else {
         processingLogin(false);
         setErrorText('Email ou mot de passe incorrect');
       }
@@ -101,7 +101,8 @@ class LoginController extends GetxController {
   Future<void> signUp(String emailAddress, String password) async {
     processingLogin(true);
     try {
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
@@ -111,8 +112,7 @@ class LoginController extends GetxController {
         globalController.setCurrentUser(credential.user);
         setRole(emailAddress);
         Get.offAllNamed(Routes.HOME);
-      }
-      else{
+      } else {
         processingLogin(false);
         errorText('Une erreur est survenue');
         debugPrint("Une inconnue");
@@ -139,5 +139,4 @@ class LoginController extends GetxController {
       errorText('Une erreur est survenue');
     }
   }
-
 }

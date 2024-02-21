@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/global_controller.dart';
 import '../../../style/constantes.dart';
 
 class ManageDocController extends GetxController {
@@ -9,6 +10,8 @@ class ManageDocController extends GetxController {
 
   final db = FirebaseFirestore.instance;
   final dbStorage = FirebaseStorage.instance;
+  final globalController = Get.put(GlobalController());
+  final nbDocs = 0.obs;
 
   @override
   void onInit() {
@@ -34,6 +37,17 @@ class ManageDocController extends GetxController {
     db.collection(CollectionNames.documents.name).doc(pdfId).delete();
     final docRef = dbStorage.ref().child("${CollectionNames.processing.name}/$fileName");
     await docRef.delete();
+  }
+
+  Future<void> countDocumentsInCollection(String collectionName) async {
+    try {
+      QuerySnapshot querySnapshot = await db.collection(collectionName)
+          .where("validatorEmail", isEqualTo: globalController.currentUSer.value?.email)
+          .where("status", isEqualTo: DocStatus.traitement.name).get();
+      nbDocs.value = querySnapshot.size;
+    } catch (e) {
+      print("Error counting documents: $e");
+    }
   }
 
 }

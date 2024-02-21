@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../style/constantes.dart';
@@ -20,6 +21,7 @@ class UploadController extends GetxController {
   final filePath = "".obs;
   final uploaded = UploadStatus.finished.obs;
   final adminEmail = "".obs;
+  final uploadProgress = Rx<double?>(null);
 
   final db = FirebaseFirestore.instance;
   final dbStorage = FirebaseStorage.instance;
@@ -78,6 +80,30 @@ class UploadController extends GetxController {
         adminEmail(randomEmail);
       },
       onError: (e) => print("Error getting document: $e"),
+    );
+  }
+
+  void showProgressDialog() {
+    Get.defaultDialog(
+      title: 'Progression',
+      content: Obx(() {
+        double progress = uploadProgress.value ?? 0.0;
+
+        if (progress == 1.0) {
+          Get.back();
+        }
+        return Column(
+          children: [
+            Text('${(progress * 100).toStringAsFixed(2)}%',
+              style: const TextStyle(color: kPrimaryColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),),
+            const SizedBox(height: 20),
+            CircularProgressIndicator(value: progress),
+          ],
+        );
+      }),
+      barrierDismissible: false,
     );
   }
 }

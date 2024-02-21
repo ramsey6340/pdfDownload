@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -47,7 +48,7 @@ class SelectPdfView extends StatelessWidget {
                     controller.authorNameController.value.text.length>3 &&
                     globalController.currentUSer.value?.uid != null
                 ){
-
+                  print(globalController.userRole.value);
                   // Preparation d'une nouvelle instance pour être enregistrer dans la base de donnée
                   PDF newPdf = PDF(
                     id: null,
@@ -65,7 +66,26 @@ class SelectPdfView extends StatelessWidget {
                     docTypes: controller.selectedTypes.toList(),
                     academicLevels: controller.selectedAcademicLevel.toList(),
                   );
-                  // Ajout du fichier dans Firestorage
+                  controller.showProgressDialog();
+
+                  final ref = controller.dbStorage.ref('${CollectionNames.documents.name}/${controller.fileName.value}');
+                  final uploadTask = ref.putData(controller.fileBytes.value);
+
+                  uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+                    // Vous pouvez accéder aux informations sur la progression ici
+                    double progress = snapshot.bytesTransferred / snapshot.totalBytes;
+                    controller.uploadProgress.value = progress;
+                    print('Upload progress: ${progress * 100}%');
+                  }, onError: (Object e) {
+                    // Gérez les erreurs ici
+                    print('Error during upload: $e');
+                  });
+
+                  // Attendre la fin de l'upload
+                  final TaskSnapshot completedTask = await uploadTask;
+                  final downloadURL = await completedTask.ref.getDownloadURL();
+
+                  /*// Ajout du fichier dans Firestorage
                   await controller.dbStorage.ref('${CollectionNames.documents.name}/${controller.fileName.value}')
                       .putData(controller.fileBytes.value);
 
@@ -73,7 +93,7 @@ class SelectPdfView extends StatelessWidget {
                   String downloadURL = await controller.dbStorage
                       .ref('${CollectionNames.documents.name}/${controller.fileName.value}')
                       .getDownloadURL();
-                  newPdf.setFileUrl = downloadURL;
+                  newPdf.setFileUrl = downloadURL;*/
 
                   // Ajout du pdf dans firestore
                   final docRef = controller.db

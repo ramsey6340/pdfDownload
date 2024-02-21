@@ -10,12 +10,18 @@ import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_download/app/style/constantes.dart';
 
+import '../../../controllers/global_controller.dart';
+
 class DownloadController extends GetxController {
   //TODO: Implement DownloadController
 
   final db = FirebaseFirestore.instance;
   final dbStorage = FirebaseStorage.instance;
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final searchTextController = TextEditingController().obs;
+  final searchText = ''.obs;
+  final filteredDocuments = <QueryDocumentSnapshot<Map<String, dynamic>>>[].obs;
+  final globalController = Get.put(GlobalController());
 
   @override
   void onInit() {
@@ -30,6 +36,15 @@ class DownloadController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void setSearchText(String text) {
+    searchText(text);
+  }
+
+  void setFilteredDocuments(List<QueryDocumentSnapshot<Map<String, dynamic>>> documents) {
+    filteredDocuments(documents);
+    print(filteredDocuments.length);
   }
 
   Future<void> webDownloadFile(String url, String filename) async {

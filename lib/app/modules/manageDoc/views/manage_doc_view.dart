@@ -9,7 +9,6 @@ import '../../../routes/app_pages.dart';
 import '../../../style/constantes.dart';
 import '../../../widgets/doc_skeleton.dart';
 import '../../../widgets/list_tile_manage_doc.dart';
-import '../../../widgets/list_tile_pdf.dart';
 import '../controllers/manage_doc_controller.dart';
 
 class ManageDocView extends StatelessWidget {
@@ -38,7 +37,7 @@ class ManageDocView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ManageDocView'),
+        title: const Text('Documents partagés'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

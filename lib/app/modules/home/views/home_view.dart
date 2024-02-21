@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -23,7 +21,7 @@ class HomeView extends GetView<HomeController> {
       stateManagement: true, // Default is true.
       hideNavigationBarWhenKeyboardShows:
       true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
-      decoration: NavBarDecoration(
+      decoration: const NavBarDecoration(
         /*borderRadius: BorderRadius.circular(10.0),*/
         colorBehindNavBar: Colors.white,
       ),
