@@ -70,8 +70,11 @@ class UploadController extends GetxController {
           (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
         List<String> emails = data['emails'];
-        int index = emails.length-1;
-        adminEmail(emails[index]);
+
+        Random random = Random();
+        // Obtenez une valeur aléatoire dans le tableau
+        String randomEmail = emails[random.nextInt(emails.length)];
+        adminEmail(randomEmail);
       },
       onError: (e) => print("Error getting document: $e"),
     );

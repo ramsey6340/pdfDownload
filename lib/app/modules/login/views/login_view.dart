@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import '../../../controllers/global_controller.dart';
+import '../../../routes/app_pages.dart';
 import '../../../style/constantes.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
-  const LoginView({Key? key}) : super(key: key);
+  LoginView({Key? key}) : super(key: key);
 
+  final globalController = Get.put(GlobalController());
 
   @override
   Widget build(BuildContext context) {
+    globalController.firebaseAuth
+        .userChanges()
+        .listen((User? user) {
+      if (user == null) {
+      } else {
+        Get.toNamed(Routes.HOME);
+        globalController.setCurrentUser(user);
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(),
       body: Center(

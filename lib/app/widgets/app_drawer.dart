@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pdf_download/app/controllers/global_controller.dart';
@@ -14,7 +15,19 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+    globalController.firebaseAuth
+        .userChanges()
+        .listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+        Get.toNamed(Routes.LOGIN);
+      } else {
+        print('User is signed in!');
+        globalController.setCurrentUser(user);
+      }
+    });
+
+    return Obx(() => Drawer(
         child: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -23,16 +36,16 @@ class AppDrawer extends StatelessWidget {
                 child: DrawerHeader(
                   margin: const EdgeInsets.all(0.0),
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: (globalController.userCredential.value!=null)?Center(
+                  child: (globalController.currentUSer.value!=null)?Center(
                     child: ListTile(
                       leading: CircleAvatar(
                         radius: 20,
-                        child: Text('${globalController.userCredential.value?.user!.email?[0].toUpperCase()}',
+                        child: Text('${globalController.currentUSer.value?.email?[0].toUpperCase()}',
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),),
-                      title: Text('${globalController.userCredential.value?.user?.email}'
-                        , style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                      title: Text('${globalController.currentUSer.value?.email}'
+                        , style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),),
                     ),
-                  ):const SizedBox(),
+                  ):SizedBox(),
                 ),
               ),
               const SizedBox(height: 20,),
@@ -46,6 +59,6 @@ class AppDrawer extends StatelessWidget {
                   label: const Text("Se deconnecter", style: TextStyle(color: Colors.red),)),
             ]
         )
-    );
+    ));
   }
 }

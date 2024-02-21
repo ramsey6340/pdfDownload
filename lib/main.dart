@@ -17,7 +17,7 @@ void main() async {
       themeMode: ThemeMode.dark,
       theme: ThemeData.dark(),
       title: "Application",
-      initialRoute: (globalController.userCredential.value != null)?Routes.HOME:Routes.LOGIN,
+      initialRoute: (globalController.currentUSer.value != null)?Routes.HOME:Routes.LOGIN,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
     ),

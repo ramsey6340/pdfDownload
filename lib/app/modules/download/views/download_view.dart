@@ -22,7 +22,7 @@ class DownloadView extends StatelessWidget {
       key: controller.scaffoldKey,
       endDrawer: AppDrawer(),
       appBar: AppBar(
-        title: const Text('DownloadView'),
+        title: const Text('Documents '),
         centerTitle: true,
         actions: [
           IconButton(

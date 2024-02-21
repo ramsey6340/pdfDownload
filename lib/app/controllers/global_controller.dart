@@ -2,14 +2,16 @@ import 'dart:html';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
+import 'package:pdf_download/app/routes/app_pages.dart';
 
 import '../style/constantes.dart';
 
 class GlobalController extends GetxController {
   //TODO: Implement GlobalController
 
+  final firebaseAuth = FirebaseAuth.instance;
   final userRole = Role.admin.name.obs;
-  final userCredential = Rx<UserCredential?>(null);
+  final currentUSer = Rx<User?>(null);
 
   @override
   void onInit() {
@@ -39,11 +41,12 @@ class GlobalController extends GetxController {
     window.open(pdfUrl, '_blank');
   }
 
-  void setUserCredential(UserCredential? credential) {
-    userCredential(credential);
+  void setCurrentUser(User? user) {
+    currentUSer(user);
   }
 
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
+    Get.toNamed(Routes.LOGIN);
   }
 }

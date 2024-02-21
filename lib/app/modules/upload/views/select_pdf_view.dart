@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,17 @@ class SelectPdfView extends StatelessWidget {
   final globalController = Get.put(GlobalController());
   @override
   Widget build(BuildContext context) {
+    globalController.firebaseAuth
+        .userChanges()
+        .listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+        globalController.setCurrentUser(user);
+      }
+    });
+
     return Obx(() => Scaffold(
       appBar: AppBar(
         title: const Text('Ajouter un document'),
@@ -32,13 +44,13 @@ class SelectPdfView extends StatelessWidget {
                     int.parse(controller.publicationYearController.value.text)<=now.year &&
                     controller.authorNameController.value.text.isNotEmpty &&
                     controller.authorNameController.value.text.length>3 &&
-                    globalController.userCredential.value?.user?.uid != null
+                    globalController.currentUSer.value?.uid != null
                 ){
 
                   // Preparation d'une nouvelle instance pour être enregistrer dans la base de donnée
                   PDF newPdf = PDF(
                     id: null,
-                    supplierId: globalController.userCredential.value!.user!.uid,
+                    supplierId: globalController.currentUSer.value!.uid,
                     validatorEmail: controller.adminEmail.value,
                     title: controller.fileName.value,
                     size: controller.fileSize.value,

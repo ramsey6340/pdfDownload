@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pdf_download/app/controllers/global_controller.dart';
-
 import '../../../routes/app_pages.dart';
 import '../../../style/constantes.dart';
 
@@ -70,12 +69,15 @@ class LoginController extends GetxController {
           password: password
       );
       if (credential.user != null) {
+        //FirebaseAuth.instanceFor(app: Firebase.app(), persistence: Persistence.LOCAL);
         processingLogin(false);
-        globalController.setUserCredential(credential);
+        globalController.setCurrentUser(credential.user);
         setRole(emailAddress);
         Get.offAllNamed(Routes.HOME);
       }
       else{
+        processingLogin(false);
+        setErrorText('Email ou mot de passe incorrect');
       }
     } on FirebaseAuthException catch (e) {
       processingLogin(false);
@@ -104,10 +106,15 @@ class LoginController extends GetxController {
         password: password,
       );
       if (credential.user != null) {
+        //FirebaseAuth.instanceFor(app: Firebase.app(), persistence: Persistence.LOCAL);
         processingLogin(false);
-        globalController.setUserCredential(credential);
+        globalController.setCurrentUser(credential.user);
         setRole(emailAddress);
         Get.offAllNamed(Routes.HOME);
+      }
+      else{
+        processingLogin(false);
+        errorText('Une erreur est survenue');
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
