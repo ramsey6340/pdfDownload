@@ -26,6 +26,7 @@ class SelectPdfView extends StatelessWidget {
         globalController.setCurrentUser(user);
       }
     });
+    controller.chooseAdmin();
 
     return Obx(() => Scaffold(
       appBar: AppBar(

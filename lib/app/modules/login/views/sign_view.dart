@@ -145,7 +145,7 @@ class SignView extends StatelessWidget{
                 child: (controller.processingLogin.value)
                     ?const SizedBox(
                     width: 15, height: 15,
-                    child: CircularProgressIndicator()):const Text("Connexion"),
+                    child: CircularProgressIndicator()):const Text("Valider",),
               )
             ],
           ),

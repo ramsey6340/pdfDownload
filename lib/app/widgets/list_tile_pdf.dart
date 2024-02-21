@@ -30,7 +30,9 @@ class ListTilePDF extends StatelessWidget {
               ? "assets/images/pdf36.png"
               : (pdf.extension == 'docx')
                   ? "assets/images/docx36.png"
-                  : "assets/images/ppt36.png"),
+                  : (pdf.extension == 'ppt')
+                      ? "assets/images/ppt36.png"
+                      : "assets/images/xlsx36.png"),
           title: Text(
             pdf.title,
             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -61,10 +63,9 @@ class ListTilePDF extends StatelessWidget {
                     )
                   : IconButton(
                       onPressed: () {
-                        if(kIsWeb) {
+                        if (kIsWeb) {
                           controller.webDownloadFile(pdf.fileUrl, pdf.title);
-                        }
-                        else {
+                        } else {
                           controller.download(pdf.fileUrl, pdf.title);
                         }
                       },

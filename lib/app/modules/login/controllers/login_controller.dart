@@ -50,7 +50,6 @@ class LoginController extends GetxController {
           (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
         dynamic emails = data['emails'] ?? [];
-        print(emails);
         if(emails.contains(emailAddress)) {
           globalController.setRole(Role.admin.name);
         } else {
@@ -116,9 +115,15 @@ class LoginController extends GetxController {
       else{
         processingLogin(false);
         errorText('Une erreur est survenue');
+        debugPrint("Une inconnue");
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
+      print(e.message);
+      print(e.code);
+      debugPrint(e.message);
+      processingLogin(false);
+      setErrorText('Une erreur est survenue');
+      /*if (e.code == 'weak-password') {
         processingLogin(false);
         print('The password provided is too weak.');
         errorText('Le mot de passe est trop faible');
@@ -126,10 +131,11 @@ class LoginController extends GetxController {
         processingLogin(false);
         print('The account already exists for that email.');
         errorText('Cet email existe déjà');
-      }
+      }*/
     } catch (e) {
       processingLogin(false);
       print(e);
+      debugPrint(e.toString());
       errorText('Une erreur est survenue');
     }
   }

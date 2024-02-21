@@ -65,11 +65,12 @@ class UploadController extends GetxController {
   void updateUploaded(UploadStatus value) => uploaded(value);
 
   void chooseAdmin() {
+    print("Dans Choose");
     final docRef = db.collection(CollectionNames.admins.name).doc("emails");
     docRef.get().then(
           (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
-        List<String> emails = data['emails'];
+        dynamic emails = data['emails'] ?? [];
 
         Random random = Random();
         // Obtenez une valeur aléatoire dans le tableau
