@@ -20,7 +20,7 @@ class DownloadView extends StatefulWidget {
 }
 
 class _DownloadViewState extends State<DownloadView> {
-  String title = "";
+  String searchText = "";
   final controller = Get.put(DownloadController());
 
   final globalController = Get.put(GlobalController());
@@ -41,9 +41,10 @@ class _DownloadViewState extends State<DownloadView> {
         appBar: AppBar(
           title: CupertinoSearchTextField(
               style: const TextStyle(color: Colors.white),
+              placeholder: "Rechercher par titre, type, niveau...",
               onChanged: (value) {
                 setState(() {
-                  title = value;
+                  searchText = value;
                 });
                 controller.setSearchText(value);
               }),
@@ -77,9 +78,18 @@ class _DownloadViewState extends State<DownloadView> {
                       final document = PDF.fromFirestore(docMap, null);
 
                       if (document.title
-                          .toString()
-                          .toLowerCase()
-                          .startsWith(title.toLowerCase())) {
+                              .toString()
+                              .toLowerCase()
+                              .startsWith(searchText.toLowerCase()) ||
+                          document.docTypes.any((type) =>
+                              type
+                                  .toString()
+                                  .toLowerCase()
+                                  .startsWith(searchText.toLowerCase()) ||
+                              document.academicLevels.any((level) => level
+                                  .toString()
+                                  .toLowerCase()
+                                  .startsWith(searchText.toLowerCase())))) {
                         return ListTilePDF(pdf: document);
                       }
                       return Container();
