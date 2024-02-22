@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-
 import '../../../controllers/global_controller.dart';
 import '../../../style/constantes.dart';
 

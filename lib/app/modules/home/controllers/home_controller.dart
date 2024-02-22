@@ -1,11 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf_download/app/modules/download/views/download_view.dart';
-import 'package:pdf_download/app/modules/safeguard/views/safeguard_view.dart';
 import 'package:pdf_download/app/modules/shared/views/shared_view.dart';
 import 'package:pdf_download/app/modules/upload/views/upload_view.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-
 import '../../../style/constantes.dart';
 
 class HomeController extends GetxController {

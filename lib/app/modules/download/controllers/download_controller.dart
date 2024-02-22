@@ -1,15 +1,11 @@
-import 'dart:math';
 import 'dart:html' as html;
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf_download/app/style/constantes.dart';
-
 import '../../../controllers/global_controller.dart';
 
 class DownloadController extends GetxController {
@@ -18,7 +14,6 @@ class DownloadController extends GetxController {
   final db = FirebaseFirestore.instance;
   final dbStorage = FirebaseStorage.instance;
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  final searchTextController = TextEditingController().obs;
   final searchText = ''.obs;
   final filteredDocuments = <QueryDocumentSnapshot<Map<String, dynamic>>>[].obs;
   final globalController = Get.put(GlobalController());
@@ -42,7 +37,8 @@ class DownloadController extends GetxController {
     searchText(text);
   }
 
-  void setFilteredDocuments(List<QueryDocumentSnapshot<Map<String, dynamic>>> documents) {
+  void setFilteredDocuments(
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents) {
     filteredDocuments(documents);
     print(filteredDocuments.length);
   }
@@ -100,5 +96,4 @@ class DownloadController extends GetxController {
       debugPrint((received / total * 100).toStringAsFixed(0) + '%');
     }
   }
-
 }

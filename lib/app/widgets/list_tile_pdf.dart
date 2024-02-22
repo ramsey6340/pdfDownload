@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pdf_download/app/controllers/global_controller.dart';
 import 'package:pdf_download/app/models/pdf.dart';
 import '../modules/download/controllers/download_controller.dart';
 import '../style/constantes.dart';
@@ -17,6 +18,7 @@ class ListTilePDF extends StatelessWidget {
   final bool processing;
 
   final controller = Get.put(DownloadController());
+  final globalController = Get.put(GlobalController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,14 @@ class ListTilePDF extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ListTile(
+          onTap: (){
+            if(!kIsWeb) {
+              globalController.openPDF(pdf.fileUrl);
+            }
+            else{
+              globalController.openPDFForWeb(pdf.fileUrl);
+            }
+          },
           leading: Image.asset((pdf.extension == 'pdf')
               ? "assets/images/pdf36.png"
               : (pdf.extension == 'docx')

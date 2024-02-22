@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:pdf_download/app/style/constantes.dart';
 import '../controllers/safeguard_controller.dart';
