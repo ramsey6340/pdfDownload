@@ -91,8 +91,8 @@ flutter_native_splash:
   #image_ios: assets/splash-ios.png
   #image_dark_ios: assets/splash-invert-ios.png
   #image_web: assets/splash-web.gif
-  image_web: assets/Icon-512.png
-  image_dark_web: assets/Icon-512.png
+  image_web: assets/images/Icon-512.png
+  image_dark_web: assets/images/Icon-512.png
   #image_dark_web: assets/splash-invert-web.gif
   #background_image_android: "assets/background-android.png"
   #background_image_dark_android: "assets/dark-background-android.png"
