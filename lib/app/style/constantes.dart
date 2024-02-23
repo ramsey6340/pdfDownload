@@ -36,8 +36,7 @@ List<AcademicLevel> kAcademicLevelList = [
 
 enum CollectionNames {
   admins,
-  documents,
-  processing
+  documents
 }
 
 const kShimmerDarkGradient = LinearGradient(

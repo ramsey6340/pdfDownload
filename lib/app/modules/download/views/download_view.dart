@@ -66,6 +66,7 @@ class _DownloadViewState extends State<DownloadView> {
         body: StreamBuilder(
             stream: controller.db
                 .collection(CollectionNames.documents.name)
+                .where("status", isEqualTo: DocStatus.ok.name)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data != null) {

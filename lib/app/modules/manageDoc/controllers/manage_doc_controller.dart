@@ -27,15 +27,19 @@ class ManageDocController extends GetxController {
     super.onClose();
   }
 
-  acceptDoc(String? pdfId) {
+  acceptDoc(String? pdfId) async {
     final docRef = db.collection(CollectionNames.documents.name).doc(pdfId);
     docRef.update({"status": DocStatus.ok.name});
+    await countDocumentsInCollection(CollectionNames.documents.name);
+    print('Dans Accept : ${nbDocs.value}');
   }
 
   refuseDoc(String? pdfId, String fileName) async {
     db.collection(CollectionNames.documents.name).doc(pdfId).delete();
-    final docRef = dbStorage.ref().child("${CollectionNames.processing.name}/$fileName");
+    final docRef = dbStorage.ref().child("${CollectionNames.documents.name}/$fileName");
     await docRef.delete();
+    await countDocumentsInCollection(CollectionNames.documents.name);
+    print('Dans Refuse : ${nbDocs.value}');
   }
 
   Future<void> countDocumentsInCollection(String collectionName) async {
@@ -44,6 +48,7 @@ class ManageDocController extends GetxController {
           .where("validatorEmail", isEqualTo: globalController.currentUSer.value?.email)
           .where("status", isEqualTo: DocStatus.traitement.name).get();
       nbDocs.value = querySnapshot.size;
+      print('Dans Count : ${nbDocs.value}');
     } catch (e) {
       print("Error counting documents: $e");
     }

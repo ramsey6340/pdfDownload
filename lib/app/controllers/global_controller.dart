@@ -53,7 +53,7 @@ class GlobalController extends GetxController {
       textCancel: "Non",
       onConfirm: () async {
         await FirebaseAuth.instance.signOut();
-        Get.toNamed(Routes.LOGIN);
+        Get.offAllNamed(Routes.LOGIN);
       },
       onCancel: () => Get.back(),
     );
