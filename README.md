@@ -1,10 +1,5 @@
 # pdf_download
 
-Copy code
-# My Project
-
-[Brief description of your project]
-
 ## Install dependencies
 
 To install the necessary dependencies for this project, run the following command in the terminal:
