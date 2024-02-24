@@ -1,16 +1,24 @@
 # pdf_download
 
-A new Flutter project.
+Copy code
+# My Project
 
-## Getting Started
+[Brief description of your project]
 
-This project is a starting point for a Flutter application.
+## Install dependencies
 
-A few resources to get you started if this is your first Flutter project:
+To install the necessary dependencies for this project, run the following command in the terminal:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+$ flutter pub get
+```
+This command will fetch and install all the required dependencies to run the project.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Theme 🎨
+1. Launcher Icon and Splash Screen
+To update your launcher icon and splash screen in the pubspec.yaml file, run the following commands in the terminal:
+
+```bash
+$ dart run flutter_launcher_icons
+$ dart run flutter_native_splash:create
+```
