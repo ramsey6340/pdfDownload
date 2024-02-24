@@ -38,7 +38,26 @@ class SelectPdfView extends StatelessWidget {
               onPressed: () async {
                 controller.updateUploaded(UploadStatus.uploading);
                 DateTime now = DateTime.now();
-                if(
+                final doc = await controller.db.collection(CollectionNames.documents.name)
+                    .doc(controller.fileName.value).get();
+                if(doc.exists) {
+                  controller.updateUploaded(UploadStatus.finished);
+                  if(context.mounted) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      animType: AnimType.rightSlide,
+                      headerAnimationLoop: false,
+                      title: 'Erreur',
+                      desc:
+                      'Un document avec le même nom existe déjà',
+                      btnOkOnPress: () {},
+                      btnOkIcon: Icons.cancel,
+                      btnOkColor: Colors.red,
+                    ).show();
+                  }
+                }
+                else if(
                 controller.fileName.value != "" &&
                     controller.fileSize.value != "" &&
                     kAllowedFileExtensions.contains(controller.fileExtension.value) &&
@@ -101,9 +120,8 @@ class SelectPdfView extends StatelessWidget {
                       .withConverter(
                     fromFirestore: PDF.fromFirestore,
                     toFirestore: (PDF pdf, options) => pdf.toFirestore(),
-                  ).doc();
+                  ).doc(controller.fileName.value);
                   newPdf.setId=docRef.id;
-                  print(newPdf.id);
 
                   await docRef.set(newPdf);
 
@@ -131,18 +149,20 @@ class SelectPdfView extends StatelessWidget {
                 }
                 else{
                   controller.updateUploaded(UploadStatus.finished);
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.error,
-                    animType: AnimType.rightSlide,
-                    headerAnimationLoop: false,
-                    title: 'Erreur',
-                    desc:
-                    'Veuillez fournir correctement tous les informations obligatoire',
-                    btnOkOnPress: () {},
-                    btnOkIcon: Icons.cancel,
-                    btnOkColor: Colors.red,
-                  ).show();
+                  if(context.mounted) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      animType: AnimType.rightSlide,
+                      headerAnimationLoop: false,
+                      title: 'Erreur',
+                      desc:
+                      'Veuillez fournir correctement tous les informations obligatoire',
+                      btnOkOnPress: () {},
+                      btnOkIcon: Icons.cancel,
+                      btnOkColor: Colors.red,
+                    ).show();
+                  }
                 }
               },
               child: (controller.uploaded.value == UploadStatus.finished)?

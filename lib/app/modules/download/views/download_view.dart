@@ -41,7 +41,7 @@ class _DownloadViewState extends State<DownloadView> {
         appBar: AppBar(
           title: CupertinoSearchTextField(
               style: const TextStyle(color: Colors.white),
-              placeholder: "Rechercher par titre, type, niveau...",
+              placeholder: "Rechercher par titre, type, niveau, autheur...",
               onChanged: (value) {
                 setState(() {
                   searchText = value;
@@ -82,6 +82,9 @@ class _DownloadViewState extends State<DownloadView> {
                               .toString()
                               .toLowerCase()
                               .startsWith(searchText.toLowerCase()) ||
+                          document.author.toString().toLowerCase().startsWith(
+                              searchText.toLowerCase()
+                          ) ||
                           document.docTypes.any((type) =>
                               type
                                   .toString()
